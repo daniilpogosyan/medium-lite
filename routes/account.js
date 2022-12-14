@@ -9,7 +9,7 @@ const { body, validationResult } = require('express-validator');
 const createCredentialsValidator = () => ([
   body('email', 'Email should have structure: mymail@example.com')
   .isEmail(),
-  body('password').isStrongPassword()
+  body('password', 'Password is not strong enough').isStrongPassword()
 ])
 
 // create a new user
@@ -22,7 +22,8 @@ router.post('/signup',
         errors.array().map((err) => new Error(err.msg)),
         'Invalid input'
       );
-      
+      res.status(400);
+
       return next(aggregateError);
     }
 
@@ -41,11 +42,16 @@ router.post('/signup',
 // verify credentials and get a jwt 
 router.post('/login', async (req, res, next) => {
   let user;
-  user = await api.getUserByEmail(req.body.email);
+  try {
+    user = await api.getUserByEmail(req.body.email);
+  } catch(err) {
+    return next(err);
+  }
 
   if(user === null
     || !bcrypt.compareSync(req.body.password, user.passwordHash)) {
     const err = new Error('Wrong email or password');
+    res.status(401);
     return next(err);
   }
 
