@@ -14,7 +14,7 @@ async function createUser(email, password) {
   // TODO: check if a user with `email` already exists in db
   // *use email index to check
 
-  addDoc(user, 'users');
+  return addDoc(user, 'users');
 };
 
 module.exports = createUser;

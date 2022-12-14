@@ -14,6 +14,7 @@ async function addDoc(doc, collectionName) {
     throw new Error('Failed to write a document')
   }
   
+  return doc;
 }
 
 module.exports = addDoc;
