@@ -8,6 +8,12 @@ router.use('/account', accountRouter);
 
 router.use('/posts', postRouter);
 
+router.use(function(req, res, next) {
+  const err = new Error('Not found');
+  res.status(404);
+  next(err);
+});
+
 router.use((err, req, res, next) => {
   // AggregateError are created in request body validators
   if (err.name === 'AggregateError') {
