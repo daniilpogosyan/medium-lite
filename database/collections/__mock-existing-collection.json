@@ -1,0 +1,17 @@
+{
+  "someuserid1": {
+    "email": "fake123@gmail.com",
+    "passwordHash": "gassr3c23eA",
+    "id": "someuserid1"
+  },
+  "someuserid2": {
+    "email": "fake456@gmail.com",
+    "passwordHash": "af12xp2fian",
+    "id": "someuserid2"
+  },
+  "someuserid3": {
+    "email": "fake789@gmail.com",
+    "passwordHash": "asfqwx1k2op",
+    "id": "someuserid3"
+  }
+}

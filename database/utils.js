@@ -31,7 +31,9 @@ async function saveCollection(collectionData, name) {
   // TODO: check if collectionData could be stored as json
   // *probably it could be solved with Typescript
 
-  jsonfile.writeFile(pathToCollection, collectionData);
+  // IMPORTANT TODO: lock file when writing to it
+
+  await jsonfile.writeFile(pathToCollection, collectionData);
   return true
 }
 
