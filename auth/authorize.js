@@ -1,0 +1,31 @@
+const jwt = require('jsonwebtoken');
+const { getUser } = require('../api');
+
+
+async function authorize(req, res, next) {
+  const bearerToken = req.header('Authorization');
+  if (bearerToken === undefined) {
+    const err = new Error('Authorization header is missing');
+    return next(err);
+  }
+  
+  // assume that bearerToken is in the form:
+  // 'Bearer {token}'
+  const token = bearerToken.split(' ')[1];
+  let decoded;
+  
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch(err) {
+    return next(err);
+  }
+
+  const userId = decoded.id;
+  const user = await getUser(userId);
+  req.user = user;
+  
+  next();
+}
+
+
+module.exports = authorize;
