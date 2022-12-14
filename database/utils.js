@@ -20,7 +20,7 @@ async function getCollection(name) {
       collection = {};
     }
     // rethrow error otherwise
-    else throw err;
+    else throw new Error('Unable to read the collection');
   }
 
   return collection;
@@ -33,7 +33,11 @@ async function saveCollection(collectionData, name) {
 
   // IMPORTANT TODO: lock file when writing to it
 
-  await jsonfile.writeFile(pathToCollection, collectionData);
+  try {
+    await jsonfile.writeFile(pathToCollection, collectionData);
+  } catch(err) {
+    throw new Error('Unable to write to the collection');
+  }
   return true
 }
 
