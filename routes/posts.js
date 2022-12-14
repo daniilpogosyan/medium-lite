@@ -12,21 +12,35 @@ const { body, validationResult } = require('express-validator');
 
 const createPostValidator = () => ([
   body('title').trim().escape()
- .isLength({max: 100, min: 10}),
+ .isLength({max: 100, min: 10})
+ .withMessage('Post title length must be between 10 and 100 characters'),
   body('content').trim().escape()
   .isLength({max: 5000, min: 100})
+  .withMessage('Post content length must be between 100 and 5000 characters')
 ]);
 
 // get a list of posts
 router.get('/', async (req, res, next) => {
-  const posts = await api.getPosts();
+  let posts;
+  try {
+    posts = await api.getPosts();
+  } catch(err){
+    return next(err) ;
+  }
+
   res.json(posts);
 });
 
 
 // get a specific post
 router.get('/:postId', async (req, res, next) => {
-  const post = await api.getPost(req.params.postId);
+  let post;
+  try {
+    post = await api.getPost(req.params.postId);
+  } catch(err) {
+    return next(err);
+  }
+
   res.json(post);
 });
 
@@ -40,7 +54,7 @@ router.post('/', authorize,
         errors.array().map((err) => new Error(err.msg)),
         'Invalid input'
       );
-      
+      res.status(400);
       return next(aggregateError);
     }
 
