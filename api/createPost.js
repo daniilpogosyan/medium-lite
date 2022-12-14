@@ -9,7 +9,7 @@ async function createPost(postData, authorId) {
     author: authorId
   }
 
-  addDoc(post, 'posts');
+  return addDoc(post, 'posts');
 };
 
 module.exports = createPost;
