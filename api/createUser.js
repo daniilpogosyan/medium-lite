@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const addDoc = require('../database/addDoc');
+const getUserByEmail = require('./getUserByEmail');
 
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
@@ -8,6 +9,12 @@ async function hashPassword(password) {
 }
 
 async function createUser(email, password) {
+  if (await getUserByEmail(email)) {
+    const err = new Error('This email is in use');
+    err.name = 'EmailInUse'
+    throw err
+  }
+
   const passwordHash = await hashPassword(password);
   const user = { email, passwordHash };
 

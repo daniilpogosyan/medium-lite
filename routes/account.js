@@ -31,6 +31,9 @@ router.post('/signup',
     try {
       user = await api.createUser(req.body.email, req.body.password);
     } catch(err) {
+      if (err.name === 'EmailInUse') {
+        res.status(400)
+      }
       return next(err);
     }
 
