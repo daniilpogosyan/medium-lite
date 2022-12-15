@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const accountRouter = require('./account');
-const postRouter = require('./posts')
+const postsRouter = require('./posts')
+const usersRouter = require('./users')
 
 router.use('/account', accountRouter);
 
-router.use('/posts', postRouter);
+router.use('/posts', postsRouter);
+
+router.use('/users', usersRouter);
 
 router.use(function(req, res, next) {
   const err = new Error('Not found');
