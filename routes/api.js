@@ -27,11 +27,12 @@ router.use((err, req, res, next) => {
     });
 
     // if res got to error-handler but somehow still have code 200
-    if (res.statusCode === 200) {
-      res.status(500);
-    }
     return res.json(errors)
   } 
+
+  if (res.statusCode === 200) {
+    res.status(500);
+  }
 
   res.json({message: err.message});
 });
