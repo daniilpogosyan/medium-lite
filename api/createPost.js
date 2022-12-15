@@ -1,15 +1,19 @@
 const bcrypt = require('bcryptjs');
 const addDoc = require('../database/addDoc');
+const { getReadingTimeEstimate } = require('./utils');
 
 
 async function createPost(postData, authorId) {
-  const post = {
+  const newPost = {
     title: postData.title,
     content: postData.content,
     author: authorId
   }
 
-  return addDoc(post, 'posts');
+  const post = await addDoc(newPost, 'posts');
+  post.readingTimeEstimate = getReadingTimeEstimate(post.content.length);
+
+  return post
 };
 
 module.exports = createPost;
