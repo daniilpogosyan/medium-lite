@@ -6,7 +6,11 @@ var router = express.Router();
 router.get('/', async (req, res, next) => {
   let users;
   try {
-    users = await getUsers();
+    const options = {
+      startId: req.query.startId,
+      limit: req.query.limit ? +req.query.limit : undefined
+    }
+    users = await getUsers(options);
   } catch(err) {
     return next(err);
   }
