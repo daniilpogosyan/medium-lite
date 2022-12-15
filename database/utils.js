@@ -93,5 +93,6 @@ async function saveCollection(collectionData, name) {
 module.exports = {
   getCollection,
   saveCollection,
-  addToIndex
+  addToIndex,
+  getIndex
 }

@@ -23,7 +23,12 @@ const createPostValidator = () => ([
 router.get('/', async (req, res, next) => {
   let posts;
   try {
-    posts = await api.getPosts();
+    const options = {
+      excludeContent: !req.query.excludeContent,
+      startId: req.query.startId,
+      limit: req.query.limit ? +req.query.limit : undefined
+    }
+    posts = await api.getPosts(options);
   } catch(err){
     return next(err) ;
   }

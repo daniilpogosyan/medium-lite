@@ -1,15 +1,14 @@
 const getDocs = require("../database/getDocs");
 
-async function getPosts({ excludeContent = true, limit = 20 } = {}) {
-
+async function getPosts({ excludeContent = true, limit = 10, startId } = {}) {
   const options = {
     limit,
+    startId,
     exclude: excludeContent ? ['content'] : []
   };
 
-  const collection = await getDocs('posts', options);
-  // TODO: options.includeContent
-  return collection
+  const posts = await getDocs('posts', options);
+  return posts
 }
 
 module.exports = getPosts;
