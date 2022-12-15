@@ -1,9 +1,9 @@
 const getDocs = require("../database/getDocs");
 
-async function getUsers({ limit = 10, startId } = {}) {
+async function getUsers({ limit = 10, page } = {}) {
   const options = {
     limit,
-    startId,
+    page,
     exclude: ['passwordHash']
   };
 

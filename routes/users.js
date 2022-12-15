@@ -7,7 +7,7 @@ router.get('/', async (req, res, next) => {
   let users;
   try {
     const options = {
-      startId: req.query.startId,
+      page: req.query.page ? +req.query.page : undefined,
       limit: req.query.limit ? +req.query.limit : undefined
     }
     users = await getUsers(options);

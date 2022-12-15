@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
   try {
     const options = {
       excludeContent: !req.query.excludeContent,
-      startId: req.query.startId,
+      page: req.query.page ? +req.query.page : undefined,
       limit: req.query.limit ? +req.query.limit : undefined
     }
     posts = await api.getPosts(options);

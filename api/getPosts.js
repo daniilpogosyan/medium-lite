@@ -1,9 +1,9 @@
 const getDocs = require("../database/getDocs");
 
-async function getPosts({ excludeContent = true, limit = 10, startId } = {}) {
+async function getPosts({ excludeContent = true, limit = 10, page } = {}) {
   const options = {
     limit,
-    startId,
+    page,
     exclude: excludeContent ? ['content'] : []
   };
 
