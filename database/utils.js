@@ -6,6 +6,55 @@ function getPathToCollection(name) {
   return path.resolve(__dirname, 'collections', `${name}.json`);
 } 
 
+function getPathToIndex(colName, prop) {
+  return path.resolve(__dirname, 'indexes', `${colName}_${prop}.json`);
+} 
+
+async function getIndex(colName, prop) {
+  const pathToIndex = getPathToIndex(colName, prop);
+
+  let index;
+  try {
+    index = await jsonfile.readFile(pathToIndex);
+  } catch(err) {
+    // if collection does not exist, then create a new one
+    if (err.code === 'ENOENT') {
+      await jsonfile.writeFile(pathToIndex, []);
+      collection = [];
+    }
+    // rethrow error otherwise
+    else throw new Error('Unable to read the index');
+  }
+
+  return index
+}
+
+
+function getEntryFromIndex(index, propValue) {
+  return index.find(enrty => entry[0] === propValue);
+}
+
+async function addToIndex(colName, prop, doc) {
+  const index = await getIndex(colName, prop);
+
+  const newEntry = [ doc[prop], doc.id ]
+  index.push(newEntry);
+  
+  // a, b have structure: [propValue, [id1, id2...]]
+  index.sort((a, b) => {
+    if (a[0] > b[0]) return 1
+    if (a[0] < b[0]) return -1
+    return 0
+  });
+
+  await saveIndex(colName, prop, index);
+}
+
+async function saveIndex(colName, prop, index) {
+  await jsonfile.writeFile(getPathToIndex(colName, prop), index);
+}
+
+
 async function getCollection(name) {
   const pathToCollection = getPathToCollection(name);
 
@@ -43,5 +92,6 @@ async function saveCollection(collectionData, name) {
 
 module.exports = {
   getCollection,
-  saveCollection
+  saveCollection,
+  addToIndex
 }

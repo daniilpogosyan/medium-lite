@@ -1,4 +1,8 @@
-const { getCollection, saveCollection } = require("./utils");
+const {
+  getCollection,
+  saveCollection,
+  addToIndex
+} = require("./utils");
 const uniqid = require('uniqid');
 
 async function addDoc(doc, collectionName) {
@@ -9,7 +13,8 @@ async function addDoc(doc, collectionName) {
   collection[doc.id] = doc;
   
   try {
-    await saveCollection(collection, collectionName)
+    await saveCollection(collection, collectionName);
+    await addToIndex(collectionName, 'id', doc);
   } catch(err) {
     throw new Error('Failed to write a document')
   }
