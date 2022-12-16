@@ -1,36 +1,6 @@
-const jsonfile = require('jsonfile');
 const path = require('path');
 
-
-const canSaveSrc = (state) => (
-  // TODO: lock file
-  async function saveSrc(src) {
-    try {
-      await jsonfile.writeFile(state.path, src, {spaces: 2});
-    } catch(err) {
-      throw new Error(`Unable to write to the ${state.type || ''} file`);
-    }
-    return true
-  }
-)
-
-const canReadSrc = (state) => (
-  // TODO: lock file
-  async function readSrc() {
-    let src;
-    try {
-      src = await jsonfile.readFile(state.path);
-    } catch(err) {
-      // if collection does not exist, then create a new one
-      if (err.code === 'ENOENT') {
-        return state.getEmptyInstance()
-      }
-      // rethrow error otherwise
-      else throw new Error(`Unable to read the ${state.type || ''} file`);
-    }
-    return src;
-  }
-);
+const { canReadSrc, canSaveSrc } = require('./composing-functions');
 
 const index = (collectionName, property) => {
   const state = {
