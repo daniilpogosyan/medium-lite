@@ -17,8 +17,6 @@ async function getDocs(collectionName, { exclude, page = 1, limit = 10 } = {}) {
     })
   }
   
-
-  // TODO: add pagination
   return docs
 }
 
