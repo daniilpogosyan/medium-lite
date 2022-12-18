@@ -15,6 +15,7 @@ const index = (collectionName, property) => {
 
 
   async function addDoc(doc)  {
+    console.log('before push', state.cache)
     const existingEntry = getEntry(doc[property]);
     if (existingEntry !== undefined) {
       const ids = existingEntry[1];
@@ -30,6 +31,7 @@ const index = (collectionName, property) => {
       });
     }
     
+    console.log('after push', state.cache)
     await saveSrc(state.cache);
   }
 
@@ -45,9 +47,15 @@ const index = (collectionName, property) => {
   
 
   // Initialize
-  readSrc().then(src => state.cache = src);
+  function init() {
+    console.log('before init', state.cache)
+    readSrc()
+    .then(src => state.cache = src)
+    .then(() => console.log('after init', state.cache));
+  }
 
   return {
+    init,
     addDoc,
     getIdsByPropValue
   }
