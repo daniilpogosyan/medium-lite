@@ -1,5 +1,6 @@
-var express = require('express');
-const { getUsers } = require('../api');
+import * as express from 'express';
+import { getUsers } from '../api';
+
 var router = express.Router();
 
 /* GET users listing. */
@@ -18,4 +19,4 @@ router.get('/', async (req, res, next) => {
   res.json(users);
 });
 
-module.exports = router;
+export default router

@@ -1,6 +1,5 @@
-const jwt = require('jsonwebtoken');
-const { getUser } = require('../api');
-
+import { getUser } from '../api';
+import * as jwt from 'jsonwebtoken';
 
 async function authorize(req, res, next) {
   const bearerToken = req.header('Authorization');
@@ -30,4 +29,4 @@ async function authorize(req, res, next) {
 }
 
 
-module.exports = authorize;
+export default authorize;

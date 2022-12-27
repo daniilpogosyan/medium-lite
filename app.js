@@ -1,9 +1,11 @@
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-require('dotenv').config()
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import dotenv from 'dotenv';
 
-const apiRouter = require('./routes/api');
+dotenv.config()
+
+import apiRouter from './routes/api';
 
 var app = express();
 
@@ -31,4 +33,4 @@ app.use(function(err, req, res, next) {
   res.json({message: err.message || "Error"});
 });
 
-module.exports = app;
+export default app;

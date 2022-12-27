@@ -1,12 +1,10 @@
-const express = require('express');
+import express from 'express';
+import * as api from '../api';
+import { createPost } from '../api';
+import authorize from '../auth/authorize';
+
+
 const router = express.Router();
-
-const api = require('../api');
-const { createPost } = require('../api');
-const authorize = require('../auth/authorize')
-
-const accountRouter = require('./account');
-const postRouter = require('./posts')
 
 const { body, validationResult } = require('express-validator');
 
@@ -80,4 +78,4 @@ router.post('/', authorize,
 );
 
 
-module.exports = router;
+export default router;

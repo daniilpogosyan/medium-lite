@@ -1,6 +1,5 @@
-const jsonfile = require('jsonfile');
-const path = require('path');
-
+import * as jsonfile from 'jsonfile';
+import * as path from 'path';
 
 function getPathToCollection(name) {
   return path.resolve(__dirname, 'collections', `${name}.json`);
@@ -10,7 +9,7 @@ function getPathToIndex(colName, prop) {
   return path.resolve(__dirname, 'indexes', `${colName}_${prop}.json`);
 } 
 
-async function getIndex(colName, prop) {
+export async function getIndex(colName, prop) {
   const pathToIndex = getPathToIndex(colName, prop);
 
   let index;
@@ -20,7 +19,7 @@ async function getIndex(colName, prop) {
     // if collection does not exist, then create a new one
     if (err.code === 'ENOENT') {
       await jsonfile.writeFile(pathToIndex, []);
-      collection = [];
+      index = [];
     }
     // rethrow error otherwise
     else throw new Error('Unable to read the index');
@@ -31,10 +30,10 @@ async function getIndex(colName, prop) {
 
 
 function getEntryFromIndex(index, propValue) {
-  return index.find(enrty => entry[0] === propValue);
+  return index.find(entry => entry[0] === propValue);
 }
 
-async function addToIndex(colName, prop, doc) {
+export async function addToIndex(colName, prop, doc) {
   const index = await getIndex(colName, prop);
 
   const newEntry = [ doc[prop], doc.id ]
@@ -55,7 +54,7 @@ async function saveIndex(colName, prop, index) {
 }
 
 
-async function getCollection(name) {
+export async function getCollection(name) {
   const pathToCollection = getPathToCollection(name);
 
   let collection;
@@ -75,7 +74,7 @@ async function getCollection(name) {
   return collection;
 }
 
-async function saveCollection(collectionData, name) {
+export async function saveCollection(collectionData, name) {
   const pathToCollection = getPathToCollection(name);
   // TODO: check if collectionData could be stored as json
   // *probably it could be solved with Typescript
@@ -88,11 +87,4 @@ async function saveCollection(collectionData, name) {
     throw new Error('Unable to write to the collection');
   }
   return true
-}
-
-module.exports = {
-  getCollection,
-  saveCollection,
-  addToIndex,
-  getIndex
 }

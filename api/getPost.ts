@@ -1,5 +1,5 @@
-const getDoc = require("../database/getDoc");
-const { getReadingTimeEstimate } = require('./utils');
+import getDoc from '../database/getDoc';
+import { getReadingTimeEstimate } from './utils';
 
 async function getPost(id) {
   const post = await getDoc('posts', id);
@@ -8,4 +8,4 @@ async function getPost(id) {
   return post
 }
 
-module.exports = getPost;
+export default getPost;

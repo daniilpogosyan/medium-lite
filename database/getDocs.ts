@@ -1,4 +1,4 @@
-const { getCollection, getIndex } = require("./utils");
+import { getCollection } from "./utils";
 
 async function getDocs(collectionName, { exclude, page = 1, limit = 10 } = {}) {
   // TODO: use cache
@@ -22,4 +22,4 @@ async function getDocs(collectionName, { exclude, page = 1, limit = 10 } = {}) {
   return docs
 }
 
-module.exports = getDocs;
+export default getDocs;

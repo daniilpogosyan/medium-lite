@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const api = require('../api');
-const issueJWT = require('../auth/issueJWT');
-const bcrypt = require('bcryptjs');
-const { body, validationResult } = require('express-validator');
+import express, { application } from 'express';
+import issueJWT from '../auth/issueJWT';
+import * as bcrypt from 'bcryptjs';
+import { body, validationResult } from 'express-validator';
+import * as api from '../api';
 
+const router = express.Router();
 
 const createCredentialsValidator = () => ([
   body('email', 'Email should have structure: mymail@example.com')
@@ -62,4 +62,5 @@ router.post('/login', async (req, res, next) => {
   res.json(jwt);
 });
 
-module.exports = router;
+
+export default router;

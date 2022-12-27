@@ -1,4 +1,4 @@
-const { getCollection } = require("./utils");
+import { getCollection } from "./utils";
 
 async function getDoc(collectionName, id) {
   // TODO: use cache
@@ -10,4 +10,4 @@ async function getDoc(collectionName, id) {
   return collection[id];
 }
 
-module.exports = getDoc;
+export default getDoc;

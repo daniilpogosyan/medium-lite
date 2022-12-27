@@ -4,9 +4,12 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('medium-lite:server');
-var http = require('http');
+
+import app from '../app'
+import debugModule from 'debug';
+import * as http from 'http';
+
+const debug = debugModule('medium-lite:server');
 
 /**
  * Get port from environment and store in Express.

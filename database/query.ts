@@ -1,9 +1,9 @@
-const { getCollection } = require("./utils");
+import { getCollection } from "./utils";
 
 async function query(collectionName, options) {
   const collection = await getCollection(collectionName);
 
-  for (doc of Object.values(collection)) {
+  for (const doc of Object.values(collection)) {
     if(docMeetsQuery(doc, options)) {
       return doc
     }
@@ -22,4 +22,4 @@ function docMeetsQuery(doc, options) {
   return true;
 }
 
-module.exports = query;
+export default query

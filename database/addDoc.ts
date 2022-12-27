@@ -1,9 +1,5 @@
-const {
-  getCollection,
-  saveCollection,
-  addToIndex
-} = require("./utils");
-const uniqid = require('uniqid');
+import { getCollection, saveCollection, addToIndex } from "./utils";
+import * as uniqid from 'uniqid';
 
 async function addDoc(doc, collectionName) {
   if (doc.id === undefined) {
@@ -22,4 +18,5 @@ async function addDoc(doc, collectionName) {
   return doc;
 }
 
-module.exports = addDoc;
+
+export default addDoc;

@@ -1,6 +1,5 @@
-const bcrypt = require('bcryptjs');
-const addDoc = require('../database/addDoc');
-const { getReadingTimeEstimate } = require('./utils');
+import addDoc from '../database/addDoc';
+import { getReadingTimeEstimate } from './utils';
 
 
 async function createPost(postData, authorId) {
@@ -16,4 +15,4 @@ async function createPost(postData, authorId) {
   return post
 };
 
-module.exports = createPost;
+export default createPost

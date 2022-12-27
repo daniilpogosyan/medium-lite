@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
+import accountRouter from './account';
+import postsRouter from './posts';
+import usersRouter from './users';
 
-const accountRouter = require('./account');
-const postsRouter = require('./posts')
-const usersRouter = require('./users')
+import * as express from 'express';
+
+const router = express.Router();
 
 router.use('/account', accountRouter);
 
@@ -37,4 +38,4 @@ router.use((err, req, res, next) => {
   res.json({message: err.message});
 });
 
-module.exports = router;
+export default router;

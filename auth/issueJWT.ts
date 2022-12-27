@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 
 function issueJWT(payload) {
   const options = {
@@ -11,4 +11,4 @@ function issueJWT(payload) {
 }
 
 
-module.exports = issueJWT
+export default issueJWT;

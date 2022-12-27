@@ -1,4 +1,4 @@
-const getDocs = require("../database/getDocs");
+import getDocs from '../database/getDocs';
 
 async function getUsers({ limit = 10, page } = {}) {
   const options = {
@@ -11,4 +11,4 @@ async function getUsers({ limit = 10, page } = {}) {
   return users
 }
 
-module.exports = getUsers;
+export default getUsers;

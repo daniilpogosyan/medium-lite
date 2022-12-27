@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const addDoc = require('../database/addDoc');
-const getUserByEmail = require('./getUserByEmail');
+import * as bcrypt from 'bcryptjs';
+import addDoc from '../database/addDoc';
+import getUserByEmail from './getUserByEmail';
 
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
@@ -24,4 +24,4 @@ async function createUser(email, password) {
   return addDoc(user, 'users');
 };
 
-module.exports = createUser;
+export default createUser;
