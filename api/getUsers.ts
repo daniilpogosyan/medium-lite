@@ -1,6 +1,7 @@
 import getDocs from '../database/getDocs';
 
-async function getUsers({ limit = 10, page } = {}) {
+
+async function getUsers({ limit = 10, page = 1 } = {}) {
   const options = {
     limit,
     page,

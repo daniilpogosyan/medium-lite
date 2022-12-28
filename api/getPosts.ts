@@ -1,6 +1,12 @@
 import getDocs from "../database/getDocs";
 
-async function getPosts({ excludeContent = true, limit = 10, page } = {}) {
+type Opts = {
+  excludeContent: boolean;
+  limit: number;
+  page: number;
+}
+
+async function getPosts({ excludeContent = true, limit = 10, page = 1 }: Opts) {
   const options = {
     limit,
     page,
