@@ -1,9 +1,15 @@
-import { getCollection, saveCollection, addToIndex } from "./utils";
+import { getCollection, saveCollection, addToIndex, Doc } from "./utils";
 import * as uniqid from 'uniqid';
 
-async function addDoc(doc, collectionName) {
-  if (doc.id === undefined) {
-    doc.id = uniqid();
+// ??? make sure that docData does bot include `id`
+async function addDoc(docData: {}, collectionName: string) {
+  // ??? redundant
+  // if (doc.id === undefined) {
+  //   doc.id = uniqid();
+  // }
+  const doc: Doc = {
+    ...docData,
+    id: uniqid(),
   }
   const collection = await getCollection(collectionName);
   collection[doc.id] = doc;

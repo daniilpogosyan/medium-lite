@@ -1,6 +1,13 @@
-import { getCollection } from "./utils";
+import { Doc, getCollection } from "./utils";
 
-async function getDocs(collectionName, { exclude, page = 1, limit = 10 } = {}) {
+type Opts = {
+  exclude?: string[],
+  page?: number,
+  limit?: number
+}
+
+
+async function getDocs(collectionName: string, { exclude, page = 1, limit = 10 }: Opts) {
   // TODO: use cache
   const collection = await getCollection(collectionName);
   

@@ -1,6 +1,7 @@
-import { getCollection } from "./utils";
+import { getCollection, Doc } from "./utils";
 
-async function query(collectionName, options) {
+
+async function query(collectionName: string, options: {}) {
   const collection = await getCollection(collectionName);
 
   for (const doc of Object.values(collection)) {
@@ -12,7 +13,7 @@ async function query(collectionName, options) {
   return null;
 }
 
-function docMeetsQuery(doc, options) {
+function docMeetsQuery(doc: Doc, options: {}) {
   for (const [param, value] of Object.entries(options)) {
     if (doc[param] !== value) {
       return false;

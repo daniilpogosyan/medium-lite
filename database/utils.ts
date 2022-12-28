@@ -1,23 +1,24 @@
 import * as jsonfile from 'jsonfile';
 import * as path from 'path';
+import { isNodeError } from '../utils';
 
-function getPathToCollection(name) {
+function getPathToCollection(name: string) {
   return path.resolve(__dirname, 'collections', `${name}.json`);
 } 
 
-function getPathToIndex(colName, prop) {
+function getPathToIndex(colName: string, prop: string) {
   return path.resolve(__dirname, 'indexes', `${colName}_${prop}.json`);
 } 
 
-export async function getIndex(colName, prop) {
+export async function getIndex(colName: string, prop: string) {
   const pathToIndex = getPathToIndex(colName, prop);
 
-  let index;
+  let index: Index;
   try {
     index = await jsonfile.readFile(pathToIndex);
   } catch(err) {
     // if collection does not exist, then create a new one
-    if (err.code === 'ENOENT') {
+    if (isNodeError(err) && err.code === 'ENOENT') {
       await jsonfile.writeFile(pathToIndex, []);
       index = [];
     }
@@ -29,14 +30,18 @@ export async function getIndex(colName, prop) {
 }
 
 
-function getEntryFromIndex(index, propValue) {
+function getEntryFromIndex(index: Index, propValue: string) {
   return index.find(entry => entry[0] === propValue);
 }
 
-export async function addToIndex(colName, prop, doc) {
-  const index = await getIndex(colName, prop);
 
-  const newEntry = [ doc[prop], doc.id ]
+// ??? extend cocBase in function params (both type and interface)
+// UNDONE
+export async function addToIndex<T extends string>(colName: string, propName: T, doc: Doc & {[key in T]: any}) { 
+  const index = await getIndex(colName, propName);
+
+  const newEntry: IndexEntry = [doc[propName], doc.id];
+
   index.push(newEntry);
   
   // a, b have structure: [propValue, [id1, id2...]]
@@ -46,24 +51,24 @@ export async function addToIndex(colName, prop, doc) {
     return 0
   });
 
-  await saveIndex(colName, prop, index);
+  await saveIndex(colName, propName, index);
 }
 
-async function saveIndex(colName, prop, index) {
+async function saveIndex(colName: string, prop: string, index: Index) {
   await jsonfile.writeFile(getPathToIndex(colName, prop), index);
 }
 
 
-export async function getCollection(name) {
+export async function getCollection(name: string) {
   const pathToCollection = getPathToCollection(name);
 
-  let collection;
+  let collection: Collection;
 
   try {
     collection = await jsonfile.readFile(pathToCollection);
   } catch(err) {
     // if collection does not exist, then create a new one
-    if (err.code === 'ENOENT') {
+    if (isNodeError(err) && err.code === 'ENOENT') {
       await jsonfile.writeFile(pathToCollection, {});
       collection = {};
     }
@@ -74,10 +79,8 @@ export async function getCollection(name) {
   return collection;
 }
 
-export async function saveCollection(collectionData, name) {
+export async function saveCollection(collectionData: Collection, name: string) {
   const pathToCollection = getPathToCollection(name);
-  // TODO: check if collectionData could be stored as json
-  // *probably it could be solved with Typescript
 
   // IMPORTANT TODO: lock file when writing to it
 
@@ -87,4 +90,17 @@ export async function saveCollection(collectionData, name) {
     throw new Error('Unable to write to the collection');
   }
   return true
+}
+
+
+type IndexEntry = [prop: any, id: string];
+type Index = IndexEntry[];
+
+export type Doc = {
+  id: string;
+  [key: string]: any;
+}
+
+export type Collection = {
+  [id: string]: Doc
 }
