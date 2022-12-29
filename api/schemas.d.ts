@@ -1,11 +1,13 @@
+import { DocId } from "../database/utils";
+
 interface WithId {
-  id: string
+  id: DocId
 }
 
 export interface LeanPost {
   title: string;
   content: string;
-  authorId: string;
+  authorId: DocId;
 }
 
 export interface LeanUser {

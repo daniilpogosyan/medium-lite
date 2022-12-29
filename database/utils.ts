@@ -93,14 +93,15 @@ export async function saveCollection(collectionData: Collection, name: string) {
 }
 
 
-type IndexEntry = [prop: any, id: string];
+type IndexEntry = [prop: any, id: DocId];
 type Index = IndexEntry[];
+export type DocId = string;
 
 export type Doc = {
-  id: string;
+  id: DocId;
   [key: string]: any;
 }
 
 export type Collection = {
-  [id: string]: Doc
+  [id: DocId]: Doc
 }
