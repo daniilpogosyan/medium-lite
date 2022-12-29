@@ -18,7 +18,7 @@ router.use(function(req, res, next) {
   next(err);
 });
 
-router.use((err, req, res, next) => {
+router.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   // AggregateError are created in request body validators
   if (err.name === 'AggregateError') {
     const errors = err.errors.map(error => {

@@ -1,8 +1,9 @@
-import express, { application } from 'express';
+import * as express from 'express';
 import issueJWT from '../auth/issueJWT';
 import * as bcrypt from 'bcryptjs';
 import { body, validationResult } from 'express-validator';
 import * as api from '../api';
+import { isNodeError } from '../utils';
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ const createCredentialsValidator = () => ([
 // create a new user
 router.post('/signup',
   createCredentialsValidator(),
-  async (req, res, next) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const aggregateError = new AggregateError(
@@ -31,7 +32,7 @@ router.post('/signup',
     try {
       user = await api.createUser(req.body.email, req.body.password);
     } catch(err) {
-      if (err.name === 'EmailInUse') {
+      if (isNodeError(err) && err.name === 'EmailInUse') {
         res.status(400)
       }
       return next(err);

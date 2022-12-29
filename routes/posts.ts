@@ -1,12 +1,11 @@
-import express from 'express';
+import * as express from 'express';
 import * as api from '../api';
 import { createPost } from '../api';
 import authorize from '../auth/authorize';
-
+import { body, validationResult } from 'express-validator';
+import { Doc } from '../database/utils';
 
 const router = express.Router();
-
-const { body, validationResult } = require('express-validator');
 
 const createPostValidator = () => ([
   body('title').trim().escape()
@@ -18,6 +17,7 @@ const createPostValidator = () => ([
 ]);
 
 // get a list of posts
+
 router.get('/', async (req, res, next) => {
   let posts;
   try {
@@ -50,7 +50,7 @@ router.get('/:postId', async (req, res, next) => {
 // verify jwt and create a new post
 router.post('/', authorize,
   createPostValidator(),
-  async (req, res, next) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const aggregateError = new AggregateError(
@@ -61,14 +61,21 @@ router.post('/', authorize,
       return next(aggregateError);
     }
 
+    if (req.user === undefined) {
+      const err = new Error('Invalid user or token');
+      res.status(401);
+      return next(err);
+    }
+    
     const postData = {
       title: req.body.title,
       content: req.body.content,
+      authorId: req.user.id
     }
 
-    let post;
+    let post: Doc;
     try {
-      post = await createPost(postData, req.user.id);
+      post = await createPost(postData);
     } catch(err) {
       return next(err);
     }

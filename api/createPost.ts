@@ -1,13 +1,13 @@
 import addDoc from '../database/addDoc';
-import { Post } from './schemas';
+import { LeanPost } from './schemas';
 import { getReadingTimeEstimate } from './utils';
 
 
-async function createPost(postData: Post, authorId: string) {
+async function createPost(postData: LeanPost) {
   const newPost = {
     title: postData.title,
     content: postData.content,
-    author: authorId
+    author: postData.authorId
   }
 
   const post = await addDoc(newPost, 'posts');
