@@ -52,6 +52,12 @@ router.post('/login', async (req, res, next) => {
     return next(err);
   }
 
+  if (typeof req.body.password !== 'string') {
+    const err = new Error('Password must be a string');
+    res.status(400);
+    return next(err)
+  }
+
   if(user === null
     || !bcrypt.compareSync(req.body.password, user.passwordHash)) {
     const err = new Error('Wrong email or password');

@@ -4,6 +4,7 @@ import { createPost } from '../api';
 import authorize from '../auth/authorize';
 import { body, validationResult } from 'express-validator';
 import { Doc } from '../database/utils';
+import { isPositiveInteger } from '../utils';
 
 const router = express.Router();
 
@@ -38,12 +39,25 @@ router.get('/', async (req, res, next) => {
 // get a specific post
 router.get('/:postId', async (req, res, next) => {
   let post;
+
+  const postId = +req.params.postId;
+  if (!isPositiveInteger(postId)) {
+    const err = new Error('Invalid ID. ID must be a positive integer');
+    res.status(400)
+    return next(err)
+  }
+
   try {
-    post = await api.getPost(+req.params.postId);
+    post = await api.getPost(postId);
   } catch(err) {
     return next(err);
   }
 
+  if (post === null) {
+    res.status(404);
+    const err = new Error('Post not found');
+    return next(err);
+  }
   res.json(post);
 });
 

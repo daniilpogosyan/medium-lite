@@ -1,3 +1,4 @@
+import { isPositiveInteger } from "../utils";
 import { Doc, getDatabase } from "./utils";
 
 type Opts = {
@@ -6,9 +7,6 @@ type Opts = {
   limit?: number
 }
 
-function isPositiveInteger(num: any): num is number {
-  return num > 0 && Number.isSafeInteger(num)
-} 
 
 // test this approach of excluding columns:
 // https://stackoverflow.com/questions/729197/exclude-a-column-using-select-except-columna-from-tablea
