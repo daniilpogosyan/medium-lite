@@ -3,6 +3,7 @@ import postsRouter from './posts';
 import usersRouter from './users';
 
 import * as express from 'express';
+import { isAggregateError } from '../utils';
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.use(function(req, res, next) {
 
 router.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   // AggregateError are created in request body validators
-  if (err.name === 'AggregateError') {
+  if (isAggregateError(err)) {
     const errors = err.errors.map(error => {
       return {
         message: error.message
