@@ -1,28 +1,52 @@
-import { getCollection, saveCollection, addToIndex, Doc } from "./utils";
-import * as uniqid from 'uniqid';
+import getDoc from "./getDoc";
+import { Doc, getDatabase } from "./utils";
 
-// ??? make sure that docData does bot include `id`
-async function addDoc(docData: {}, collectionName: string) {
-  // ??? redundant
-  // if (doc.id === undefined) {
-  //   doc.id = uniqid();
-  // }
-  const doc: Doc = {
-    ...docData,
-    id: uniqid(),
+// TODO: handle errors EVERYWHERE 
+// TODO: generalize build*Query()
+
+function buildInsertQuery(docData: {}, table: string) {
+  const columnsArray = [];
+  const valuesArray = [];
+
+  for (const [column, value] of Object.entries(docData)) {
+    columnsArray.push(column);
+
+    if (typeof value === 'string') {
+      valuesArray.push(`'${value}'`)
+    } else if (typeof value === 'number') {
+      valuesArray.push(value)
+    }
   }
-  const collection = await getCollection(collectionName);
-  collection[doc.id] = doc;
-  
-  try {
-    await saveCollection(collection, collectionName);
-    await addToIndex(collectionName, 'id', doc);
-  } catch(err) {
-    throw new Error('Failed to write a document')
-  }
-  
-  return doc;
+
+  const values = '(' + valuesArray.join(', ') + ')';
+  const columns = '(' + columnsArray.join(', ') + ')';
+  const query = `INSERT INTO ${table} ${columns} VALUES${values}`;
+  return query;
 }
 
+
+async function addDoc(docData: {}, collectionName: string) {
+  const db = getDatabase();
+
+  const doc: Promise<Doc> = new Promise(function(resolve, reject) {
+    const insertSql = buildInsertQuery(docData, collectionName);
+    db.run(insertSql, function(err) {
+      if (err) {
+        return reject(err);
+      }
+      
+      getDoc(collectionName, this.lastID)
+      .then((newDoc) => {
+        if (newDoc === null) {
+          return reject(new Error('Unable to add doc'));
+        }
+        resolve(newDoc)
+      })
+    });
+  })
+
+  // TODO: close db
+  return doc
+}
 
 export default addDoc;

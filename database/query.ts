@@ -1,26 +1,35 @@
-import { getCollection, Doc } from "./utils";
+import { Doc, getDatabase } from "./utils";
 
 
-async function query(collectionName: string, options: {}) {
-  const collection = await getCollection(collectionName);
 
-  for (const doc of Object.values(collection)) {
-    if(docMeetsQuery(doc, options)) {
-      return doc
+function buildSelectQuery(table: string, options: {}) {
+  const conditionsArray: string[] = [];
+ 
+  for (const [column, value] of Object.entries(options)) {
+    if (typeof value === 'string') {
+      conditionsArray.push(`${column}='${value}'`)
+    } else if (typeof value === 'number') {
+      conditionsArray.push(`${column}=${value}`)
     }
   }
 
-  return null;
+  const conditions = conditionsArray.join(' AND ');
+  const query = `SELECT * FROM ${table} WHERE ${conditions}`
+  return query
 }
 
-function docMeetsQuery(doc: Doc, options: {}) {
-  for (const [param, value] of Object.entries(options)) {
-    if (doc[param] !== value) {
-      return false;
-    }
-  }
+function query(collectionName: string, options: {}) {
+  const db = getDatabase();
 
-  return true;
+  const doc: Promise<Doc | null> = new Promise(function(resolve, reject) {
+    const selectSql = buildSelectQuery(collectionName, options)
+    db.get(selectSql, function(err, row) {
+      if (err) reject(err)
+      resolve(row || null)
+    })
+  });
+
+  return doc;
 }
 
 export default query

@@ -39,7 +39,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:postId', async (req, res, next) => {
   let post;
   try {
-    post = await api.getPost(req.params.postId);
+    post = await api.getPost(+req.params.postId);
   } catch(err) {
     return next(err);
   }

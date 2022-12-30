@@ -18,15 +18,10 @@ async function authorize(req: Request, res: Response, next: NextFunction) {
   let decoded;
   
   if (process.env.JWT_SECRET === undefined) {
-    throw new Error('Cannot verify jwt due to internal error');
+    throw new Error('Cannot verify jwt due to internal error. Secret is missing');
   }
 
   try {
-    if (process.env.JWT_SECRET === undefined) {
-      const err = new Error('Unable to verify jwt due to internal error: secret is missing');
-      res.status(500);
-      return next(err)
-    }
     decoded = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
   } catch(err) {
     res.status(401);
