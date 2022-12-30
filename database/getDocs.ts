@@ -34,9 +34,19 @@ async function getDocs(collectionName: string, options: Opts): Promise<Doc[]> {
 
   const docs: Promise<Doc[]> = new Promise(function(resolve, reject) {
     const selectSql = buildSelectQuery(collectionName, options);
+    console.time('excluding')
     db.all(selectSql, function(err, rows) {
       if (err) reject(err)
       // TODO: exclude fields (see above)
+      
+      if (options.exclude) {
+        console.time('remove column')
+        rows.forEach(row => {
+          options.exclude?.forEach(unwantedColumn => delete row[unwantedColumn])
+        })
+        console.timeEnd('remove column')
+      }
+      console.timeEnd('excluding')
       resolve(rows)
     });
   });
