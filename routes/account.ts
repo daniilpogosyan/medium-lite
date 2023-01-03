@@ -59,7 +59,7 @@ router.post('/login', async (req, res, next) => {
   }
 
   if(user === null
-    || !bcrypt.compareSync(req.body.password, user.passwordHash)) {
+    || !(await bcrypt.compare(req.body.password, user.passwordHash))) {
     const err = new Error('Wrong email or password');
     res.status(401);
     return next(err);

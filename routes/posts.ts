@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
   let posts;
   try {
     const options = {
-      excludeContent: !req.query.excludeContent,
+      excludeContent: (req.query.excludeContent === 'true'),
       page: req.query.page ? +req.query.page : undefined,
       limit: req.query.limit ? +req.query.limit : undefined
     }
