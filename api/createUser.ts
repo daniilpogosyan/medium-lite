@@ -1,7 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import addDoc from '../database/addDoc';
 import getUserByEmail from './getUserByEmail';
-import { LeanUser } from './schemas';
 
 async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt(10);
@@ -17,12 +16,12 @@ async function createUser(email: string, password: string) {
   }
 
   const passwordHash = await hashPassword(password);
-  const user: LeanUser = { email, passwordHash };
 
   // TODO: check if a user with `email` already exists in db
   // *use email index to check
 
-  return addDoc(user, 'users');
+  const sql = `INSERT INTO users (email, passwordHash) VALUES('${email}', '${passwordHash}')`
+  return addDoc(sql);
 };
 
 export default createUser;

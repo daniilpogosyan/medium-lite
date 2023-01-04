@@ -29,3 +29,4 @@ Plan:
   2. Optional include post for user queries
   3. Optional include passwordHash for user queries
   4. Share options between service functions (getPost, getUser, ...)
+  5. Fix inconsistency of id/ID/Id and user/author
