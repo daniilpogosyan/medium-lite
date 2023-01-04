@@ -1,25 +1,30 @@
 import getDocs from "../database/getDocs";
+import { isPositiveInteger } from "../utils";
 
 type Opts = {
   userID?: number;
-  excludeContent?: boolean;
   limit?: number;
   page?: number;
 }
 
-async function getPosts({ userID,  excludeContent = true, limit = 10, page = 1 }: Opts) {
-  const options = {
-    userID,
-    limit,
-    page,
-    exclude: excludeContent ? ['content'] : []
-  };
+async function getPosts(options: Opts) {
+  let sql = `SELECT * FROM posts JOIN users ON posts.authorID=users.id`;
 
-  const sql = userID !== undefined
-  ? `posts JOIN users ON posts.authorID=users.id AND users.id=${userID}`
-  : `posts JOIN users ON posts.authorID=users.id`
+  if(options.userID !== undefined) {
+    sql += ` WHERE users.id=${options.userID}`;
+  }
 
-  const posts = await getDocs(sql, options);
+  const limit = isPositiveInteger(options.limit)
+  ? options.limit
+  : 10;
+
+  const offset = isPositiveInteger(options.limit) && isPositiveInteger(options.page)
+  ? options.limit * (options.page - 1)
+  : 0;
+
+  sql += ` LIMIT ${limit} OFFSET ${offset}`;
+  console.log(sql)
+  const posts = await getDocs(sql);
   return posts
 }
 
