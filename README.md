@@ -22,3 +22,10 @@ API for Medium-lite
 ## Notes
 * Requsts for post creating must contain fields: `content` and `title`.
 * Authorization header must follow the structure: `Bearer {jwt}`
+
+## Dev notes
+Plan:
+  1. Query every fields (SELECT *) at first just to make that shit work
+  2. Optional include post for user queries
+  3. Optional include passwordHash for user queries
+  4. Share options between service functions (getPost, getUser, ...)

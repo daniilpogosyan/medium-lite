@@ -35,7 +35,8 @@ async function addDoc(docData: {}, collectionName: string) {
         return reject(err);
       }
       
-      getDoc(collectionName, this.lastID)
+      const sql = `SELECT * FROM ${collectionName} WHERE id=${this.lastID}`;
+      getDoc(sql)
       .then((newDoc) => {
         if (newDoc === null) {
           return reject(new Error('Unable to add doc'));

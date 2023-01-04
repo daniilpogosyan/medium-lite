@@ -25,7 +25,8 @@ router.get('/', async (req, res, next) => {
     const options = {
       excludeContent: (req.query.excludeContent === 'true'),
       page: req.query.page ? +req.query.page : undefined,
-      limit: req.query.limit ? +req.query.limit : undefined
+      limit: req.query.limit ? +req.query.limit : undefined,
+      userID: req.query.authorID ? +req.query.authorID : undefined
     }
     posts = await api.getPosts(options);
   } catch(err){
@@ -89,6 +90,7 @@ router.post('/', authorize,
 
     let post: Doc;
     try {
+      console.debug('inroute')
       post = await createPost(postData);
     } catch(err) {
       return next(err);

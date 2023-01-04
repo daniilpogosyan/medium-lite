@@ -2,7 +2,9 @@ import getDoc from "../database/getDoc";
 import { DocId } from "../database/utils";
 
 async function getUser(id: DocId) {
-  const user = await getDoc('users', id);
+  const sql = `SELECT * FROM users WHERE id=${id}`;
+  const user = await getDoc(sql);
+
   return user
 }
 

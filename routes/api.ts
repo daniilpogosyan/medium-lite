@@ -33,10 +33,19 @@ router.use((err: Error, req: express.Request, res: express.Response, next: expre
   } 
 
   if (res.statusCode === 200) {
-    res.status(500);
+    return res.status(500);
   }
 
-  res.json({message: err.message});
+  if (req.app.get('env') == 'development') {
+    console.error(err);
+    return res.json({
+      name: err.name,
+      message: err.message,
+      stack: err.stack
+    });
+  } else {
+    return res.json({message: err.message || "Error"});
+  }
 });
 
 export default router;

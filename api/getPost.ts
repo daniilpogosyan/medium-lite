@@ -3,7 +3,8 @@ import { DocId } from '../database/utils';
 import { getReadingTimeEstimate } from './utils';
 
 async function getPost(id: DocId) {
-  const post = await getDoc('posts', id);
+  let sql = `SELECT * FROM posts WHERE id=${id}`;
+  const post = await getDoc(sql);
   if (post === null) {
     return null
   }

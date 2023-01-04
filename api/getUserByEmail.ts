@@ -1,7 +1,9 @@
-import query from '../database/query';
+import getDoc from '../database/getDoc';
+
 
 async function getUserByEmail(email: string) {
-  const user = await query('users', { email });  
+  const sql = `SELECT * FROM users WHERE users.email='${email}'`;
+  const user = await getDoc(sql);
   return user;
 }
 
