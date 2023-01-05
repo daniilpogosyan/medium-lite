@@ -9,13 +9,15 @@ datasource db {
 
 model posts {
   ID       Int     @id @default(autoincrement())
-  title    String?
-  content  String?
-  authorID Int?
+  title    String  
+  content  String  
+  authorID Int 
+  author   users   @relation(fields: [authorID], references: [ID])
 }
 
 model users {
   ID           Int     @id @default(autoincrement())
-  email        String?
-  passwordHash String?
+  email        String  @unique 
+  passwordHash String
+  posts        posts[]
 }
