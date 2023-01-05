@@ -5,10 +5,11 @@ type Opts = {
   userID?: number;
   limit?: number;
   page?: number;
+  excludeContent?: boolean
 }
 
-async function getPosts(options: Opts) {
-  let sql = `SELECT * FROM posts JOIN users ON posts.authorID=users.ID`;
+async function getPosts(options: Opts = { excludeContent: true }) {
+  let sql = `SELECT posts.id as postID, posts.authorID, posts.title, ${options.excludeContent ? "" : "posts.content"} FROM posts JOIN users ON posts.authorID=users.ID`;
 
   if(options.userID !== undefined) {
     sql += ` WHERE users.ID=${options.userID}`;

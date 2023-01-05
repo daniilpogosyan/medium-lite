@@ -5,7 +5,8 @@ import { getReadingTimeEstimate } from './utils';
 
 
 async function getPost(ID: DocID) {
-  let sql = `SELECT () FROM posts WHERE ID=${ID}`;
+  const columns = "post.content, posts.title, posts.id as postID, posts.authorID, users.email";
+  let sql = `SELECT ${columns} jOIN users ON users.id=posts.authorID FROM posts WHERE ID=${ID}`;
   const post = await getDoc(sql);
   if (post === null) {
     return null

@@ -9,7 +9,8 @@ router.get('/', async (req, res, next) => {
   try {
     const options = {
       page: req.query.page ? +req.query.page : undefined,
-      limit: req.query.limit ? +req.query.limit : undefined
+      limit: req.query.limit ? +req.query.limit : undefined,
+      includePosts: (req.query.includePosts === 'true')
     }
     users = await getUsers(options);
   } catch(err) {

@@ -1,9 +1,10 @@
 import getDocs from '../database/getDocs';
 import { isPositiveInteger } from '../utils';
 
-type Opts = {
+export type Opts = {
   limit?: number,
   page?: number
+  includePosts?: boolean
 }
 
 async function getUsers(options: Opts) {
@@ -15,8 +16,15 @@ async function getUsers(options: Opts) {
   ? options.limit * (options.page - 1)
   : 0;
 
-  const sql = `SELECT * FROM users LIMIT ${limit} OFFSET ${offset}`;
-
+  let sql: string;
+  if (options.includePosts) {
+    const columns = "posts.title, posts.id as postID, posts.authorID, users.email"
+    const join = "JOIN posts ON posts.authorID=1";
+    sql = `SELECT ${columns} FROM users ${join} LIMIT ${limit} OFFSET ${offset}`;  
+  } else {
+    sql = `SELECT email, ID FROM users LIMIT ${limit} OFFSET ${offset}`;  
+  }
+  console.log(sql)
   const users = await getDocs(sql);
   return users
 }
