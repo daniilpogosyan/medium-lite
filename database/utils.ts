@@ -12,10 +12,10 @@ export function getDatabase() {
   return db;
 }
 
-export type DocId = number;
+export type DocID = number;
 
 export type Doc = {
-  id: DocId;
+  ID: DocID;
   [key: string]: any;
 }
 
@@ -25,8 +25,8 @@ export type Doc = {
 const db = getDatabase();
 
 const initSql = [
-  "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, title TEXT, content TEXT, authorID INTEGER)",
-  "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, email TEXT, passwordHash TEXT)",
+  "CREATE TABLE IF NOT EXISTS posts (ID INTEGER PRIMARY KEY, title TEXT, content TEXT, authorID INTEGER)",
+  "CREATE TABLE IF NOT EXISTS users (ID INTEGER PRIMARY KEY, email TEXT, passwordHash TEXT)",
 ]
 
 db.serialize(() => {

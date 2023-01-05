@@ -2,7 +2,7 @@ import { getUser } from '../api';
 import * as jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../api/schemas';
-import { DocId } from '../database/utils';
+import { DocID } from '../database/utils';
 
 async function authorize(req: Request, res: Response, next: NextFunction) {
   const bearerToken = req.header('Authorization');
@@ -28,10 +28,10 @@ async function authorize(req: Request, res: Response, next: NextFunction) {
     return next(err);
   }
 
-  const userId: DocId = decoded.id;
-  const user = await getUser(userId) as User;
+  const userID: DocID = decoded.ID;
+  const user = await getUser(userID) as User;
   if (user === null) {
-    const err = new Error('User with this id does not exist');
+    const err = new Error('User with this ID does not exist');
     res.status(401);
     return next(err);
   }

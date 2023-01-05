@@ -38,7 +38,7 @@ router.post('/signup',
       return next(err);
     }
 
-    const jwt = issueJWT({id: user.id});
+    const jwt = issueJWT({ID: user.ID});
     res.json(jwt);
   }
 );
@@ -65,7 +65,7 @@ router.post('/login', async (req, res, next) => {
     return next(err);
   }
 
-  const jwt = issueJWT({id: user.id});
+  const jwt = issueJWT({ID: user.ID});
   res.json(jwt);
 });
 

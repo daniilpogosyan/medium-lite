@@ -24,7 +24,7 @@ async function addDoc(sqlForSet: string) {
         throw new Error("Query doesn't include substring 'INSERT INTO table_name'")
       const updatedTable = match[0].split(' ')[2];
 
-      const sqlForGet = `SELECT * FROM ${updatedTable} WHERE id=${this.lastID}`;
+      const sqlForGet = `SELECT * FROM ${updatedTable} WHERE ID=${this.lastID}`;
       getDoc(sqlForGet)
       .then((newDoc) => {
         if (newDoc === null) {

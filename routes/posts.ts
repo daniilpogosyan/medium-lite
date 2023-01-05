@@ -38,18 +38,18 @@ router.get('/', async (req, res, next) => {
 
 
 // get a specific post
-router.get('/:postId', async (req, res, next) => {
+router.get('/:postID', async (req, res, next) => {
   let post;
 
-  const postId = +req.params.postId;
-  if (!isPositiveInteger(postId)) {
-    const err = new Error('Invalid ID. ID must be a positive integer');
+  const postID = +req.params.postID;
+  if (!isPositiveInteger(postID)) {
+    const err = new Error('InvalID ID. ID must be a positive integer');
     res.status(400)
     return next(err)
   }
 
   try {
-    post = await api.getPost(postId);
+    post = await api.getPost(postID);
   } catch(err) {
     return next(err);
   }
@@ -70,7 +70,7 @@ router.post('/', authorize,
     if (!errors.isEmpty()) {
       const aggregateError = new AggregateError(
         errors.array().map((err) => new Error(err.msg)),
-        'Invalid input'
+        'InvalID input'
       );
       res.status(400);
       return next(aggregateError);
@@ -85,7 +85,7 @@ router.post('/', authorize,
     const postData = {
       title: req.body.title,
       content: req.body.content,
-      authorId: req.user.id
+      authorID: req.user.ID
     }
 
     let post: Doc;

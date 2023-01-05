@@ -1,9 +1,11 @@
 import getDoc from '../database/getDoc';
-import { DocId } from '../database/utils';
+import { DocID } from '../database/utils';
 import { getReadingTimeEstimate } from './utils';
 
-async function getPost(id: DocId) {
-  let sql = `SELECT * FROM posts WHERE id=${id}`;
+
+
+async function getPost(ID: DocID) {
+  let sql = `SELECT () FROM posts WHERE ID=${ID}`;
   const post = await getDoc(sql);
   if (post === null) {
     return null

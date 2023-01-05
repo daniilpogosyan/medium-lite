@@ -8,10 +8,10 @@ type Opts = {
 }
 
 async function getPosts(options: Opts) {
-  let sql = `SELECT * FROM posts JOIN users ON posts.authorID=users.id`;
+  let sql = `SELECT * FROM posts JOIN users ON posts.authorID=users.ID`;
 
   if(options.userID !== undefined) {
-    sql += ` WHERE users.id=${options.userID}`;
+    sql += ` WHERE users.ID=${options.userID}`;
   }
 
   const limit = isPositiveInteger(options.limit)

@@ -1,4 +1,4 @@
-import { Doc, DocId, getDatabase } from "./utils";
+import { Doc, DocID, getDatabase } from "./utils";
 
 async function getDoc(sql: string){
   const db = getDatabase();

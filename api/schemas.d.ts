@@ -1,13 +1,13 @@
-import { DocId } from "../database/utils";
+import { DocID } from "../database/utils";
 
-interface WithId {
-  id: DocId
+interface WithID {
+  ID: DocID
 }
 
 export interface LeanPost {
   title: string;
   content: string;
-  authorId: DocId;
+  authorID: DocID;
 }
 
 export interface LeanUser {
@@ -15,7 +15,7 @@ export interface LeanUser {
   email: string;
 }
 
-export type Post = LeanPost & WithId;
-export type User = LeanUser & WithId;
+export type Post = LeanPost & WithID;
+export type User = LeanUser & WithID;
 
 // ??? Ok, but extra (lean) types suck

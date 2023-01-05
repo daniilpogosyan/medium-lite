@@ -4,7 +4,7 @@ import { getReadingTimeEstimate } from './utils';
 
 
 async function createPost(postData: LeanPost) {
-  const { title, content, authorId: authorID } = postData;
+  const { title, content, authorID: authorID } = postData;
   const sql = `INSERT INTO posts (title, content, authorID) VALUES('${title}', '${content}', '${authorID}')`
   const post = await addDoc(sql);
   if (post !== null) {
