@@ -1,7 +1,7 @@
-import { User } from "../api/schemas";
+import { users } from "@prisma/client";
 
 declare module 'express' {
   interface Request {
-    user?: User
+    user?: users
   }
 }

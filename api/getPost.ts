@@ -1,20 +1,28 @@
-import getDoc from '../database/getDoc';
-import { DocID } from '../database/utils';
+import { posts } from '@prisma/client';
+import prisma from './prisma-client';
+
 import { getReadingTimeEstimate } from './utils';
 
 
+async function getPost(ID: posts['ID']) {
+  const post =  await prisma.posts.findUnique({
+    select: {
+      title: true,
+      content: true,
+      ID: true,
+      author: true
+    },
+    where: {ID}
+  });
 
-async function getPost(ID: DocID) {
-  const columns = "post.content, posts.title, posts.id as postID, posts.authorID, users.email";
-  let sql = `SELECT ${columns} jOIN users ON users.id=posts.authorID FROM posts WHERE ID=${ID}`;
-  const post = await getDoc(sql);
   if (post === null) {
     return null
   }
-  
-  // TODO: define readingTimeEstimate as virtual property
-  post.readingTimeEstimate = getReadingTimeEstimate(post.content.length);
-  return post
+
+  return {
+    ...post,
+    readingTimeEstimate: getReadingTimeEstimate(post.content.length)
+  };
 }
 
 export default getPost;

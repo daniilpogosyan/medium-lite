@@ -1,9 +1,11 @@
-import getDoc from '../database/getDoc';
+import prisma from "./prisma-client";
 
 
 async function getUserByEmail(email: string) {
-  const sql = `SELECT * FROM users WHERE users.email='${email}'`;
-  const user = await getDoc(sql);
+  const user = await prisma.users.findUnique({
+    where: {email}
+  });
+
   return user;
 }
 

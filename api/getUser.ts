@@ -1,9 +1,10 @@
-import getDoc from "../database/getDoc";
-import { DocID } from "../database/utils";
+import { posts } from "@prisma/client";
+import prisma from "./prisma-client";
 
-async function getUser(ID: DocID) {
-  const sql = `SELECT * FROM users WHERE ID=${ID}`;
-  const user = await getDoc(sql);
+async function getUser(ID: posts['ID']) {
+  const user = await prisma.users.findUnique({
+    where: {ID}
+  })
 
   return user
 }

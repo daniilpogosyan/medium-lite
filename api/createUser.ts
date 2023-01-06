@@ -1,5 +1,5 @@
+import prisma from './prisma-client';
 import * as bcrypt from 'bcryptjs';
-import addDoc from '../database/addDoc';
 import getUserByEmail from './getUserByEmail';
 
 async function hashPassword(password: string) {
@@ -14,14 +14,15 @@ async function createUser(email: string, password: string) {
     err.name = 'EmailInUse'
     throw err
   }
-
   const passwordHash = await hashPassword(password);
+  const user = await prisma.users.create({
+    data: {
+      email,
+      passwordHash
+    }
+  });
 
-  // TODO: check if a user with `email` already exists in db
-  // *use email index to check
-
-  const sql = `INSERT INTO users (email, passwordHash) VALUES('${email}', '${passwordHash}')`
-  return addDoc(sql);
+  return user 
 };
 
 export default createUser;

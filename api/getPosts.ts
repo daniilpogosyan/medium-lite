@@ -1,4 +1,4 @@
-import getDocs from "../database/getDocs";
+import prisma from "./prisma-client";
 import { isPositiveInteger } from "../utils";
 
 type Opts = {
@@ -9,12 +9,6 @@ type Opts = {
 }
 
 async function getPosts(options: Opts = { excludeContent: true }) {
-  let sql = `SELECT posts.id as postID, posts.authorID, posts.title, ${options.excludeContent ? "" : "posts.content"} FROM posts JOIN users ON posts.authorID=users.ID`;
-
-  if(options.userID !== undefined) {
-    sql += ` WHERE users.ID=${options.userID}`;
-  }
-
   const limit = isPositiveInteger(options.limit)
   ? options.limit
   : 10;
@@ -23,9 +17,20 @@ async function getPosts(options: Opts = { excludeContent: true }) {
   ? options.limit * (options.page - 1)
   : 0;
 
-  sql += ` LIMIT ${limit} OFFSET ${offset}`;
-  console.log(sql)
-  const posts = await getDocs(sql);
+  const posts = await prisma.posts.findMany({
+    skip: offset,
+    take: limit,
+    select: {
+      title: true,
+      content: options.excludeContent ? false : true,
+      author: true,
+      ID: true
+    },
+    where: {
+      ...(options.userID !== undefined ? {authorID: options.userID} : {})
+    }
+  })
+
   return posts
 }
 

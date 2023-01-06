@@ -3,7 +3,7 @@ import * as api from '../api';
 import { createPost } from '../api';
 import authorize from '../auth/authorize';
 import { body, validationResult } from 'express-validator';
-import { Doc } from '../database/utils';
+import { posts } from '@prisma/client';
 import { isPositiveInteger } from '../utils';
 
 const router = express.Router();
@@ -88,7 +88,7 @@ router.post('/', authorize,
       authorID: req.user.ID
     }
 
-    let post: Doc;
+    let post: posts;
     try {
       console.debug('inroute')
       post = await createPost(postData);

@@ -1,18 +1,22 @@
-import addDoc from '../database/addDoc';
+import { posts } from '@prisma/client';
+import prisma from './prisma-client';
 import { LeanPost } from './schemas';
 import { getReadingTimeEstimate } from './utils';
 
-
 async function createPost(postData: LeanPost) {
-  const { title, content, authorID: authorID } = postData;
-  const sql = `INSERT INTO posts (title, content, authorID) VALUES('${title}', '${content}', '${authorID}')`
-  const post = await addDoc(sql);
-  if (post !== null) {
-    // ??? post.readingTimeEstimate should be number, not any
-    post.readingTimeEstimate = getReadingTimeEstimate(post.content.length);
-  }
+  const { title, content, authorID } = postData;
+  const post = await prisma.posts.create({
+    data: {
+      title,
+      content,
+      authorID
+    }
+  }) as posts
 
-  return post
-};
+  return {
+    ...post,
+    readingTimeEstimate: getReadingTimeEstimate(post.content.length)
+  };
+}
 
 export default createPost
